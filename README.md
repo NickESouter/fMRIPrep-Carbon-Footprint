@@ -1,4 +1,4 @@
-# Sustainable-fMRI-Preprocessing
+# Measuring and reducing the carbon footprint of fMRI preprocessing in fMRIPrep
 
 This repository contains a collection of Python and Shell scripts used for the project 'Measuring and reducing the carbon footprint of fMRI preprocessing in fMRIPrep'. This study did not involve novel data collection, but made use of an existing repository. The scripts included here were used to process and analyse data. The application and use of each is summarised below. Summaries here are ordered according to the order in which they would have been run for a given pipeline. Within each script, comments are provided to comprehensively document the intention of each section.
 
