@@ -1,6 +1,6 @@
 # Measuring and reducing the carbon footprint of fMRI preprocessing in fMRIPrep
 
-This repository contains a collection of Python and Shell scripts used for the project 'Measuring and reducing the carbon footprint of fMRI preprocessing in fMRIPrep'. This study did not involve novel data collection, but made use of an existing repository. The scripts included here were used to process and analyse data. The application and use of each is summarised below. Summaries here are ordered according to the order in which they would have been run for a given pipeline. Within each script, comments are provided to comprehensively document the intention of each section.
+This repository contains a collection of Python and Shell scripts used for the project 'Measuring and reducing the carbon footprint of fMRI preprocessing in fMRIPrep'. This study did not involve novel data collection, but made use of an existing repository (https://openneuro.org/datasets/ds000030/versions/1.0.0). The scripts included here were used to process and analyse data. The application and use of each is summarised below. Summaries here are ordered according to the order in which they would have been run for a given pipeline. Within each script, comments are provided to comprehensively document the intention of each section.
 
 For all scripts detailed below (with the exception of the pipeline-specific fMRIPrep scripts), the user must open the script and manually update the 'pipeline' variable towards the top, depending on which pipeline was being run. For instance, for Pipeline 0 this would simply be 
 ```
@@ -9,12 +9,22 @@ pipeline = '0'
 
 ## fMRIPrep Scripts
 
-This folder contains shell scripts used to run each of our ten fMRIPrep pipeline variants. These scripts were all submitted to the University of Sussex high performance cluster (LINK) with the command:
+This folder contains shell scripts used to run each of our ten fMRIPrep pipeline variants. These scripts were all submitted to the University of Sussex high performance cluster (https://docs.hpc.sussex.ac.uk/apollo2/index.html) with the command:
 
 ```
 qsub -jc test.long Pipeline_{X}.sh
 ```
  This indicates that this job should be registered as job class 'test.long'. Each script operates as an array, such that all subjects within the specified input BIDS directory were run as individual task in a single job. With the specified job class, each job was allocated 150 CPUs (typically translating to 30 jobs running at a given time, given that each task requests 5 CPUs).
+
+## Calc_carbon.py
+
+This python script is an in-house tool used to estimate carbon emissions resulting from computing on the University of Sussex HPC. As input, this script requires access to HPC logs, the specific job number of interest, and JSON files detailing information about HPC nodes and CPUs, in the same directory as the script. It is run in the following format:
+
+```
+qacct -j 3619260 | python3 Calc_carbon.py
+```
+
+This produces a job-specific JSON file that contains run time, energy use, and estimated emissions for the job in question.
  
  ## Carbon_extract.py
  
