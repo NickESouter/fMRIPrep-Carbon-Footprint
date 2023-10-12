@@ -7,7 +7,7 @@ For all scripts detailed below (with the exception of the pipeline-specific fMRI
 pipeline = '0'
 ```
 
-## fMRIPrep Scripts
+## fMRIPrep Scripts (UPLOADS PENDING)
 
 This folder contains shell scripts used to run each of our ten fMRIPrep pipeline variants. These scripts were all submitted to the University of Sussex high performance cluster (https://docs.hpc.sussex.ac.uk/apollo2/index.html) with the command:
 
@@ -16,7 +16,7 @@ qsub -jc test.long Pipeline_{X}.sh
 ```
  This indicates that this job should be registered as job class 'test.long'. Each script operates as an array, such that all subjects within the specified input BIDS directory were run as individual task in a single job. With the specified job class, each job was allocated 150 CPUs (typically translating to 30 jobs running at a given time, given that each task requests 5 CPUs).
 
-## Calc_carbon.py
+## Calc_carbon.py (UPLOAD PENDING)
 
 This python script is an in-house tool used to estimate carbon emissions resulting from computing on the University of Sussex HPC. As input, this script requires access to HPC logs, the specific job number of interest, and JSON files detailing information about HPC nodes and CPUs, in the same directory as the script. It is run in the following format:
 
