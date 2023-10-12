@@ -28,20 +28,25 @@ This produces a job-specific JSON file that contains run time, energy use, and e
  
  ## Carbon_extract.py
  
-This Python script pulls CodeCarbon metrics from the output of a given pipeline, by cross-referencing the fMRIPrep 'emissions.csv' file with the fMRIPrep logs for each task in the pipeline input directory. A number of data points are pulled for each subject and are put into a pipeline-specific CSV file in the specified output directory:
+This Python script pulls carbon tracking metrics from the output of a given pipeline, as derived from our in-house server-side tool (see above). This pulls information from HPC logs file associated with a given task/job. A number of data points are pulled for each subject and are put into a pipeline-specific CSV file in the specified output directory:
 
  * Subject ID
- * fMRIPrep start time/date
- * fMRIPrep end time/date
+ * Name of the relevant fMRIPrep log file
+ * The node on which the task was executed
+ * The number of CPUs used for a task
+ * The amount of RAM used for a task
  * Duration in seconds
- * Duration in hours
- * Estimated carbon emissions in CO2eq (kg)
- * Rate of emissions (emissions/time)
- * CPU power used
- * RAM power used
- * CPU energy used
- * RAM energy used
- * Total energy used, across CPU and RAM
+ * CPU (CLARIFY)
+ * CPU energy used (kWh)
+ * Estimated carbon emissions from CPU use (g)
+ * Memory (CLARIFY)
+ * RAM energy used (kWh)
+ * Estimated carbon emissions from RAM use (g)
+ * Total energy used across CPU and RAM (kWh)
+ * Total estimated carbon emissions (g)
+ * Total requested energy usage (kWH)
+ * Total requested carbon emissions (g) (CLARIFY)
+ * Total estimated carbon emissions (kg)
 
 ## SD_MAP.py
 
@@ -87,7 +92,7 @@ For me, this automated generation must be followed by an irritating manual step 
 
 ## Run_FEAT.sh
 
-This shell script runs first-level FEAT jobs and FEATQUERY roi analysis for a given pipeline. This includes several steps.
+This shell script runs first-level FEAT jobs and FEATQUERY ROI analysis for a given pipeline. This includes several steps.
 
 * Iterates through each batch (see above) of fsf files, and runs each one in FEAT. Prints a message when a given batch has started, and when it's finished.
 * It's then encessary to iterate over the output folders for each subject and make changes to files generated during registration. FSL group-level analysis requires registration to have been run at the first level, but we've already registered during fMRIPrep. Registration is therefore left on in the fsf template, and we need to clean up afterwards. I followed the steps detailed here: https://www.youtube.com/watch?v=U3tG7JMEf7M&t=482s
