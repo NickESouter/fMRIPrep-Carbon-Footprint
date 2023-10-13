@@ -7,14 +7,14 @@ For all scripts detailed below (with the exception of the pipeline-specific fMRI
 pipeline = '0'
 ```
 
-## fMRIPrep Scripts (UPLOADS PENDING)
+## fMRIPrep Scripts
 
 This folder contains shell scripts used to run each of our ten fMRIPrep pipeline variants. These scripts were all submitted to the University of Sussex high performance cluster (https://docs.hpc.sussex.ac.uk/apollo2/index.html) with the command:
 
 ```
 qsub -jc test.long Pipeline_{X}.sh
 ```
- This indicates that this job should be registered as job class 'test.long'. Each script operates as an array, such that all subjects within the specified input BIDS directory were run as individual task in a single job. With the specified job class, each job was allocated 150 CPUs (typically translating to 30 jobs running at a given time, given that each task requests 5 CPUs).
+This indicates that this job should be registered as job class 'test.long'. Each script operates as an array, such that all subjects within the specified input BIDS directory were run as individual task in a single job. With the specified job class, each job was allocated 150 CPUs (typically translating to 30 jobs running at a given time, given that each task requests 5 CPUs).
 
 ## Calc_carbon.py (UPLOAD PENDING)
 
