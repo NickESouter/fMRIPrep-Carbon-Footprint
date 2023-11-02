@@ -106,6 +106,10 @@ This Python scripts runs through the FEAT output directory for each subject for 
 
 This Python script creates an 'activation count map' for a given pipeline. This involves taking thresholded statistical maps from FSL FEAT as input. For each voxel, the percentage of the sample showing activation across the sample is calculated. This is done for both contrasts that we're interested in (favouring 'go' or 'successful stop'). NIFTI files are saved as output in the specified directory. A version of the maps that are threholded at 25% activation across the sample is also saved (this is the threshold used in visualisation by Esteban et al. (2019), although our data rarely reach this thresholded given that we used a more stringent statistical threshold of Z = 3.1).
 
+## Activation_SD_Map.py
+
+This uses the same process as the timeseries standard deviation (SD) map above. However, instead of using preprocessed timeseries values, it uses z-statistics from the unthresholded contrast of 'go > successful stop', extratced from first-level FEAT. Maps are not generated for the reverse contrast given that it is a perfect inverse, and values would be identical. Values in the resulting map reflect the standard deviation of z-statistics in each voxel, across the sample. As such, it presents areas in which there is the most variation in statistical activation, for each pipeline.
+
 ## Group_level_extract.py
 
 There will only be one group-level fsf file generated per pipeline, so I just manually run this in the terminal using
