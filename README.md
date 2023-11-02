@@ -1,6 +1,6 @@
 # Measuring and reducing the carbon footprint of fMRI preprocessing in fMRIPrep
 
-This repository contains a collection of Python and Shell scripts used for the project 'Measuring and reducing the carbon footprint of fMRI preprocessing in fMRIPrep'. This study did not involve novel data collection, but made use of an existing repository (https://openneuro.org/datasets/ds000030/versions/1.0.0). The scripts included here were used to process fMRI data, run first-levle fMRI analysis, and extract all relevant dependent variables. Statistical analysis of resulting output data was run in the JASP GUI, and as such code is not available for this aspect of the project. However, scripts used to preapre data for JASP and perform FDR correction on p-values are provided. The application and use of each available script is summarised below. Summaries here are ordered according to the order in which they would have been run for a given pipeline. Within each script, comments are provided to comprehensively document the intention of each section.
+This repository contains a collection of Python and Shell scripts used for the project 'Measuring and reducing the carbon footprint of fMRI preprocessing in fMRIPrep'. This study did not involve novel data collection, but made use of an existing repository (https://openneuro.org/datasets/ds000030/versions/1.0.0). The scripts included here were used to process fMRI data, run first-level fMRI analysis, and extract all relevant dependent variables. Statistical analysis of resulting output data was run in the JASP GUI, and as such code is not available for this aspect of the project. However, scripts used to prepare data for JASP and perform FDR correction on p-values are provided. The application and use of each available script is summarised below. Summaries here are ordered according to the order in which they would have been run for a given pipeline. Within each script, comments are provided to comprehensively document the intention of each section.
 
 For all scripts detailed below (with the exception of the pipeline-specific fMRIPrep scripts), the user must open the script and manually update the 'pipeline' variable towards the top, depending on which pipeline was being run. For instance, for Pipeline 0 this would simply be 
 ```
@@ -16,7 +16,7 @@ qsub -jc test.long Pipeline_{X}.sh
 ```
 This indicates that this job should be registered as job class 'test.long'. Each script operates as an array, such that all subjects within the specified input BIDS directory were run as individual task in a single job. With the specified job class, each job was allocated 150 CPUs (typically translating to 30 jobs running at a given time, given that each task requests 5 CPUs).
 
-## Calc_carbon.py (UPLOAD PENDING)
+## Calc_carbon.py
 
 This python script is an in-house tool used to estimate carbon emissions resulting from computing on the University of Sussex HPC. As input, this script requires access to HPC logs, the specific job number of interest, and JSON files detailing information about HPC nodes and CPUs, in the same directory as the script. It is run in the following format:
 
@@ -36,21 +36,21 @@ This Python script pulls carbon tracking metrics from the output of a given pipe
  * The number of CPUs used for a task
  * The amount of RAM used for a task
  * Duration in seconds
- * CPU (CLARIFY)
+ * CPU
  * CPU energy used (kWh)
  * Estimated carbon emissions from CPU use (g)
- * Memory (CLARIFY)
+ * Memory
  * RAM energy used (kWh)
  * Estimated carbon emissions from RAM use (g)
  * Total energy used across CPU and RAM (kWh)
  * Total estimated carbon emissions (g)
  * Total requested energy usage (kWH)
- * Total requested carbon emissions (g) (CLARIFY)
+ * Total requested carbon emissions (g), based on energy usage
  * Total estimated carbon emissions (kg)
 
 ## SD_MAP.py
 
-At this stage, we can extract the 'standard deviation (SD) map' for the respective pipeline. This involves calculating the SD of timeseries values across all timepoints within a given subject (for each voxel). In doing so, the 4D input file is converted to a 3D array. The mean standard deviation for each voxel is then calculated across subjects. This provides a measure of variaiblity within the timeseries, where higher variability may suggest lower precision of spatial normalisation and therefore reduced anatomical specificity. An output NIFTI file is generated in the specified location for the respective pipeline.
+At this stage, we can extract the 'standard deviation (SD) map' for the respective pipeline. This involves calculating the SD of timeseries values across all timepoints within a given subject (for each voxel). In doing so, the 4D input file is converted to a 3D array. The mean standard deviation for each voxel is then calculated across subjects. This provides a measure of variability within the timeseries, where higher variability may suggest lower precision of spatial normalisation and therefore reduced anatomical specificity. An output NIFTI file is generated in the specified location for the respective pipeline.
 
 This script can take a little while to run. It'll print out when the individual-level maps for each subject have finished processing, as well as the % of the sample that's now been covered.
 
@@ -69,22 +69,22 @@ This Python script identifies target fMRIPrep output files, and moves them into 
 
 This shell script is used to smooth the preprocessed BOLD data for a given subjects, and provide mean estimates of smoothness for this data both pre- and post-smoothing, with BOLD data masked by the subject's brain mask. Both smoothing and estimations are performed in AFNI. Output files are converted into a nifti format that can be used in FEAT, and any files we won't go on to use are deleted. Wil print a message in the terminal reflecting the end of smoothing for a given subject, as well as a progress counter for how many subjects have been smoothed relative to the number in the input directory. 
 
-This generates a smoothed output NIFTI file that will serve as the input for FSL FEAT, as well as txt files containing mean estimates of smoothing in the aformentioned **Results** directory for a given subject. Seperate files are generated for the pre- and post-smoothing estimates, with one value for each of the x, y, and z dimensions for each volume (x184).
+This generates a smoothed output NIFTI file that will serve as the input for FSL FEAT, as well as txt files containing mean estimates of smoothing in the aforementioned **Results** directory for a given subject. Separate files are generated for the pre- and post-smoothing estimates, with one value for each of the x, y, and z dimensions for each volume (x184).
 
 ## Smoothing_average.py
 
-This Python script pulls out mean smoothness estimates for each subject within a given pipeline, and then combines all of them into a single CSV file within the specified output directory. For each subject, seperately for the pre- and post-smoothed data, this provides:
+This Python script pulls out mean smoothness estimates for each subject within a given pipeline, and then combines all of them into a single CSV file within the specified output directory. For each subject, separately for the pre- and post-smoothed data, this provides:
 
 * The overall mean smoothness value across all volumes (x184) and dimensions (x3)
 * The mean value within the x dimension across all volumes
 * The mean value within the y dimension across all volumes
 * The mean value within the z dimension across all volumes
 
-At each level, outliers are removed by excluding any values 3 standard deviations above or below the mean of the respectvie dimension when calculating the average.
+At each level, outliers are removed by excluding any values 3 standard deviations above or below the mean of the respective dimension when calculating the average.
 
 ## fsf_generator.py
 
-This Python script is used to create the fsf files needed to run FSL FEAT. Given that each subject only has one run of the stop signal task, just one fsf file per subject is needed. This pipeline's higher-level group fsf file is also generated in a seperate directory. This script uses fsf templates, which are included in this repositroy in the 'fsf_templates' folder. For first-level files, the template used depends on whether the subject has 5 or 6 EVs present (depending on whether the subject presented with any erroneous 'go' trials or not).
+This Python script is used to create the fsf files needed to run FSL FEAT. Given that each subject only has one run of the stop signal task, just one fsf file per subject is needed. This pipeline's higher-level group fsf file is also generated in a separate directory. This script uses fsf templates, which are included in this repository in the 'fsf_templates' folder. For first-level files, the template used depends on whether the subject has 5 or 6 EVs present (depending on whether the subject presented with any erroneous 'go' trials or not).
 
 Given that FEAT jobs were run directly in the terminal rather than on our HPC cluster, output files for a given pipeline are divided into batches of 13 each (an arbitrary number). This allows one to run each pipeline's FEAT jobs in chunks to avoid overloading the system (e.g., with 257 submitted at once). The size/number of each batch can be modulated within the script by increasing or decreasing value assigned to the 'batch_size' variable.
 
@@ -95,7 +95,7 @@ For me, this automated generation must be followed by an irritating manual step 
 This shell script runs first-level FEAT jobs and FEATQUERY ROI analysis for a given pipeline. This includes several steps.
 
 * Iterates through each batch (see above) of fsf files, and runs each one in FEAT. Prints a message when a given batch has started, and when it's finished.
-* It's then encessary to iterate over the output folders for each subject and make changes to files generated during registration. FSL group-level analysis requires registration to have been run at the first level, but we've already registered during fMRIPrep. Registration is therefore left on in the fsf template, and we need to clean up afterwards. I followed the steps detailed here: https://www.youtube.com/watch?v=U3tG7JMEf7M&t=482s
+* It's then necessary to iterate over the output folders for each subject and make changes to files generated during registration. FSL group-level analysis requires registration to have been run at the first level, but we've already registered during fMRIPrep. Registration is therefore left on in the fsf template, and we need to clean up afterwards. I followed the steps detailed here: https://www.youtube.com/watch?v=U3tG7JMEf7M&t=482s
 * Using a number of pre-specified ROI masks relevant to the stop signal task, FEATQUERY ROI analysis is then run on the relevant zstat file. Descriptive statistics of z-statistics within each ROI for the respective contrast are extracted in a report that ends up in the subject's first-level FEAT output folder.
 
 ## Featquery_extract.py
@@ -113,7 +113,7 @@ There will only be one group-level fsf file generated per pipeline, so I just ma
 ```
 feat <path to group fsf>
 ```
-Following this, this Python script simply pulls out thresholded statistical maps for both contrasts, and places them in the specificied output directory for this pipeline.
+Following this, this Python script simply pulls out thresholded statistical maps for both contrasts, and places them in the specified output directory for this pipeline.
 
 ## Pipeline_data_compile.py
 
@@ -134,8 +134,8 @@ For each variable, individual subject data points are marked as outliers and exc
 
 ## JASP_restructure
 
-This script simply restructures the data generated by the above 'compiling' script, into the structure needed for statistical analysis in the JASP GUI. By coming over all available data, this produced one CSV file per depndent variable, with a column corresponding to each pipeline ID. Each row corresponds to a subject ID. For all outlier values categorised in the script above, N/A values are replaced by blank spaces.
+This script simply restructures the data generated by the above 'compiling' script, into the structure needed for statistical analysis in the JASP GUI. By coming over all available data, this produced one CSV file per dependent variable, with a column corresponding to each pipeline ID. Each row corresponds to a subject ID. For all outlier values categorised in the script above, N/A values are replaced by blank spaces.
 
 ## FDR_correction
 
-Using p-values generated by JASP, this provide false discovery rate (FDR) correction using the Benjamini-Hochberg method to all available dependent variables. This requires a csv file as input, which includes for each comparsion (a) a label for the comparison, (b) the respective t-value, and (c) the respective uncorrected p-value. This file must be generated manually usign results from JASP (a sample input file is provided here) It then produces a new CSV file for each DV, containing the same input information as well as corrected input values.
+Using p-values generated by JASP, this provide false discovery rate (FDR) correction using the Benjamini-Hochberg method to all available dependent variables. This requires a csv file as input, which includes for each comparison, (a) a label for the comparison, (b) the respective t-value, and (c) the respective uncorrected p-value. This file must be generated manually using results from JASP (a sample input file is provided here) It then produces a new CSV file for each DV, containing the same input information as well as corrected input values.
