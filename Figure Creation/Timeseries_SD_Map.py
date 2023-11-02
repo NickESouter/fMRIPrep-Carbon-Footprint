@@ -68,7 +68,7 @@ print("Calculating the mean map...")
 mean_map = running_sum / count
 
 #The name of the output file for this pipeline is defined.
-output_file = '/<directory root>/SD_Map/P{}_SD_Map_inc.nii.gz'.format(pipeline) #Full path removed for purpose of public sharing.
+output_file = '/<directory root>/SD_Map/P{}_Timeseries_SD_Map.nii.gz'.format(pipeline) #Full path removed for purpose of public sharing.
 
 #Creates a new NIFTI header for the output file given that it's now 3D, not 4D.
 header = timeseries_load.header.copy()
