@@ -48,9 +48,9 @@ This Python script pulls carbon tracking metrics from the output of a given pipe
  * Total requested carbon emissions (g), based on energy usage
  * Total estimated carbon emissions (kg)
 
-## SD_MAP.py
+## Timeseries_SD_MAP.py
 
-At this stage, we can extract the 'standard deviation (SD) map' for the respective pipeline. This involves calculating the SD of timeseries values across all timepoints within a given subject (for each voxel). In doing so, the 4D input file is converted to a 3D array. The mean standard deviation for each voxel is then calculated across subjects. This provides a measure of variability within the timeseries, where higher variability may suggest lower precision of spatial normalisation and therefore reduced anatomical specificity. An output NIFTI file is generated in the specified location for the respective pipeline.
+At this stage, we can extract the 'timeseries standard deviation (SD) map' for the respective pipeline. This involves calculating the SD of timeseries values across all timepoints within a given subject (for each voxel). In doing so, the 4D input file is converted to a 3D array. The mean standard deviation for each voxel is then calculated across subjects. This provides a measure of variability within the timeseries, where higher variability may suggest lower precision of spatial normalisation and therefore reduced anatomical specificity. An output NIFTI file is generated in the specified location for the respective pipeline.
 
 This script can take a little while to run. It'll print out when the individual-level maps for each subject have finished processing, as well as the % of the sample that's now been covered.
 
