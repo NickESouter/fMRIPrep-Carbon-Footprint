@@ -54,7 +54,7 @@ singularity run --cleanenv \
     --fs-license-file /license \
     --skip-bids-validation \
     --work-dir /wd \
-    --omp-nthreads 1 --nthreads 16 --mem_mb 30000 \ #P3: Threads increased from 5 to 16.
+    --omp-nthreads 1 --nthreads 16 --mem_mb 30000 \ #P8: Threads increased from 5 to 16.
     --output-spaces MNI152NLin6Asym:res-2 \
     --track-carbon \
     --country-code GBR \
