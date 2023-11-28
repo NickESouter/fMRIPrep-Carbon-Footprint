@@ -1,7 +1,7 @@
 #!/bin/bash
-#$ -N P9 #Job ID name sent to HPC cluster.
+#$ -N P7 #Job ID name sent to HPC cluster.
 #$ -pe openmp 5 #Number of requested parallel environments.
-#$ -o '/<directory root>/fMRIPrep/Pipeline_9/logs' #Folder where fMRIPrep logs files are saved out by the HPC cluster.
+#$ -o '/<directory root>/fMRIPrep/Pipeline_7/logs' #Folder where fMRIPrep logs files are saved out by the HPC cluster.
 #$ -e logs #Resquests logs.
 #$ -l m_mem_free=8G #Requested memory for HPC cluster.
 #$ -l 'h=!nodeXXX&!nodeYYY&! #A list of problematic nodes to avoid when submitting tasks.
@@ -12,10 +12,10 @@
 #be generated, (c) the designated output folder for preprocesed data, (d) the location of fMRIPrep license file,
 #and (e) the local FreeSurfer directory. With the excepton of input directory and license, each is edited to be pipeline-specific.
 DATA_DIR=/<directory root>/CNP_BIDS
-SCRATCH_DIR=/<directory root>/Pipeline_9/scratch
-OUT_DIR=/<directory root>/Pipeline_9/derivatives
+SCRATCH_DIR=/<directory root>/Pipeline_7/scratch
+OUT_DIR=/<directory root>/Pipeline_7/derivatives
 LICENSE=/<directory root>/fs_license/license.txt
-LOCAL_FREESURFER_DIR=/<directory root>/Pipeline_9/derivatives/sourcedata/freesurfer
+LOCAL_FREESURFER_DIR=/<directory root>/Pipeline_7/derivatives/sourcedata/freesurfer
 
 #Change current working directory to the input folder.
 cd ${DATA_DIR}
@@ -61,7 +61,7 @@ singularity run --cleanenv \
     --ignore slicetiming \
     --random-seed 1234 \
     --skull-strip-fixed-seed \
-    --use-syn-sdc error \ #P9: Fieldmap-free distortion correction implemented, produced an error message if needed.
+    --use-syn-sdc error \ #P7: Fieldmap-free distortion correction implemented, produced an error message if needed.
     /data /out/ participant
 
 echo Done
