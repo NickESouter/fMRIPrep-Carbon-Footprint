@@ -61,7 +61,7 @@ singularity run --cleanenv \
     --ignore slicetiming \
     --random-seed 1234 \
     --skull-strip-fixed-seed \
-    --low-mem \ #P4: Low memory mode switched on.
+    --low-mem \ #P3: Low memory mode switched on.
     /data /out/ participant
 
 echo Done
