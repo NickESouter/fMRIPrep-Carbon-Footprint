@@ -1,7 +1,7 @@
 #!/bin/bash
-#$ -N P5 #Job ID name sent to HPC cluster.
+#$ -N P4 #Job ID name sent to HPC cluster.
 #$ -pe openmp 5 #Number of requested parallel environments.
-#$ -o '/<directory root>/fMRIPrep/Pipeline_5/logs' #Folder where fMRIPrep logs files are saved out by the HPC cluster.
+#$ -o '/<directory root>/fMRIPrep/Pipeline_4/logs' #Folder where fMRIPrep logs files are saved out by the HPC cluster.
 #$ -e logs #Resquests logs.
 #$ -l m_mem_free=8G #Requested memory for HPC cluster.
 #$ -l 'h=!nodeXXX&!nodeYYY&! #A list of problematic nodes to avoid when submitting tasks.
@@ -12,10 +12,10 @@
 #be generated, (c) the designated output folder for preprocesed data, (d) the location of fMRIPrep license file,
 #and (e) the local FreeSurfer directory. With the excepton of input directory and license, each is edited to be pipeline-specific.
 DATA_DIR=/<directory root>/CNP_BIDS
-SCRATCH_DIR=/<directory root>/Pipeline_5/scratch
-OUT_DIR=/<directory root>/Pipeline_5/derivatives
+SCRATCH_DIR=/<directory root>/Pipeline_4/scratch
+OUT_DIR=/<directory root>/Pipeline_4/derivatives
 LICENSE=/<directory root>/fs_license/license.txt
-LOCAL_FREESURFER_DIR=/<directory root>/Pipeline_5/derivatives/sourcedata/freesurfer
+LOCAL_FREESURFER_DIR=/<directory root>/Pipeline_4/derivatives/sourcedata/freesurfer
 
 #Change current working directory to the input folder.
 cd ${DATA_DIR}
@@ -55,7 +55,7 @@ singularity run --cleanenv \
     --skip-bids-validation \
     --work-dir /wd \
     --omp-nthreads 1 --nthreads 5 --mem_mb 30000 \
-    --output-spaces MNI152NLin6Asym:res-2 fsaverage \ #P5: Surface output space added.
+    --output-spaces MNI152NLin6Asym:res-2 fsaverage \ #P4: Surface output space added.
     --track-carbon \
     --country-code GBR \
     --ignore slicetiming \
